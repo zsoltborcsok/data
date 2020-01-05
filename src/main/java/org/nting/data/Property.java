@@ -3,6 +3,10 @@ package org.nting.data;
 import java.util.Objects;
 import java.util.function.Function;
 
+import org.nting.data.property.PropertyConverter;
+
+import com.google.common.base.Converter;
+
 public interface Property<T> {
 
     void setValue(T value);
@@ -35,5 +39,9 @@ public interface Property<T> {
 
     default void adjustValue(Function<T, T> valueConverter) {
         setValue(valueConverter.apply(getValue()));
+    }
+
+    default <C> Property<C> convert(Converter<T, C> converter) {
+        return new PropertyConverter<>(converter, this);
     }
 }
