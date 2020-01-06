@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.function.Function;
 
 import org.nting.data.property.PropertyConverter;
+import org.nting.data.property.PropertyTransform;
 
 import com.google.common.base.Converter;
 
@@ -43,5 +44,9 @@ public interface Property<T> {
 
     default <C> Property<C> convert(Converter<T, C> converter) {
         return new PropertyConverter<>(converter, this);
+    }
+
+    default <C> Property<C> transform(Function<T, C> transform) {
+        return new PropertyTransform<>(transform, this);
     }
 }
