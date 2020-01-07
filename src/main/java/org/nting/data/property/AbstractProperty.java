@@ -1,5 +1,6 @@
 package org.nting.data.property;
 
+import java.util.Comparator;
 import java.util.List;
 
 import org.nting.data.Property;
@@ -8,7 +9,6 @@ import org.nting.data.ValueChangeEvent;
 import org.nting.data.ValueChangeListener;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 public abstract class AbstractProperty<T> implements Property<T> {
@@ -26,6 +26,7 @@ public abstract class AbstractProperty<T> implements Property<T> {
 
     protected void fireValueChange(T prevValue) {
         ValueChangeEvent<T> valueChangeEvent = new ValueChangeEvent<>(this, prevValue);
-        ImmutableList.copyOf(valueChangeListeners).forEach(listener -> listener.valueChange(valueChangeEvent));
+        valueChangeListeners.stream().sorted(Comparator.comparingInt(ValueChangeListener::priority))
+                .forEach(listener -> listener.valueChange(valueChangeEvent));
     }
 }
