@@ -9,6 +9,7 @@ import org.nting.data.Property;
 import org.nting.data.Registration;
 import org.nting.data.ValueChangeEvent;
 import org.nting.data.ValueChangeListener;
+import org.nting.data.bean.RuntimeBean;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
@@ -17,7 +18,7 @@ import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-public class PropertySet {
+public class PropertySet implements RuntimeBean {
 
     private final List<ValueChangeListener<Object>> valueChangeListeners = Lists.newLinkedList();
     private final BiMap<String, Property<?>> idPropertyMap = HashBiMap.create();
@@ -53,6 +54,7 @@ public class PropertySet {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public <T> Property<T> getProperty(String id) {
         return (Property<T>) idPropertyMap.get(id);
     }
@@ -61,6 +63,7 @@ public class PropertySet {
         return idPropertyMap.inverse().get(property);
     }
 
+    @Override
     public Set<String> getPropertyIds() {
         return idPropertyMap.keySet();
     }
