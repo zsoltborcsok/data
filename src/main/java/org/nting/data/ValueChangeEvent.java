@@ -8,18 +8,18 @@ public class ValueChangeEvent<T> extends EventObject {
 
     private final T value;
     private final T prevValue;
-    private final Object propertyId;
+    private final String propertyName;
 
     public ValueChangeEvent(Property<T> property, T prevValue) {
         this(property, property.getValue(), prevValue, null);
     }
 
-    public ValueChangeEvent(Property<T> property, T value, T prevValue, Object propertyId) {
+    public ValueChangeEvent(Property<T> property, T value, T prevValue, String propertyName) {
         super(property);
 
         this.value = value;
         this.prevValue = prevValue;
-        this.propertyId = propertyId;
+        this.propertyName = propertyName;
     }
 
     @SuppressWarnings("unchecked")
@@ -35,13 +35,13 @@ public class ValueChangeEvent<T> extends EventObject {
         return prevValue;
     }
 
-    public Object getPropertyId() {
-        return propertyId;
+    public Object getPropertyName() {
+        return propertyName;
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this).add("source", getSource()).add("value", value)
-                .add("prevValue", prevValue).add("propertyId", propertyId).toString();
+                .add("prevValue", prevValue).add("propertyName", propertyName).toString();
     }
 }
