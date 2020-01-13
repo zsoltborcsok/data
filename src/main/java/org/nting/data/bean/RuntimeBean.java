@@ -10,6 +10,18 @@ public interface RuntimeBean {
 
     <T> Property<T> getProperty(String propertyName);
 
+    default <T> Property<T> getProperty(Object propertyId) {
+        return getProperty(propertyId.toString());
+    }
+
+    default <T> T getValue(Object propertyId) {
+        return this.<T> getProperty(propertyId).getValue();
+    }
+
+    default <T> void setValue(Object propertyId, T value) {
+        getProperty(propertyId).setValue(value);
+    }
+
     default BeanDescriptor<?> beanDescriptor() {
         BeanDescriptor<?> beanDescriptor = new BeanDescriptor<>(getClass());
         for (String propertyName : getPropertyNames()) {

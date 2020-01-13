@@ -37,20 +37,20 @@ public class PropertySet implements RuntimeBean {
         return property;
     }
 
-    public <T> Property<T> addObjectProperty(String propertyName, T defaultValue) {
-        return addProperty(propertyName, new ObjectProperty<>(defaultValue));
+    public <T> Property<T> addObjectProperty(Object propertyId, T defaultValue) {
+        return addProperty(propertyId.toString(), new ObjectProperty<>(defaultValue));
     }
 
-    public final <T> ListProperty<T> addListProperty(String propertyName, Iterable<? extends T> elements) {
-        return (ListProperty<T>) addProperty(propertyName, new ListProperty<T>(elements));
+    public final <T> ListProperty<T> addListProperty(Object propertyId, Iterable<? extends T> elements) {
+        return (ListProperty<T>) addProperty(propertyId.toString(), new ListProperty<T>(elements));
     }
 
-    public final <T> SetProperty<T> addSetProperty(String propertyName, Iterable<? extends T> elements) {
-        return (SetProperty<T>) addProperty(propertyName, new SetProperty<T>(elements));
+    public final <T> SetProperty<T> addSetProperty(Object propertyId, Iterable<? extends T> elements) {
+        return (SetProperty<T>) addProperty(propertyId.toString(), new SetProperty<T>(elements));
     }
 
-    public final <K, V> MapProperty<K, V> addMapProperty(String propertyName) {
-        return (MapProperty<K, V>) addProperty(propertyName, new MapProperty<K, V>());
+    public final <K, V> MapProperty<K, V> addMapProperty(Object propertyId) {
+        return (MapProperty<K, V>) addProperty(propertyId.toString(), new MapProperty<K, V>());
     }
 
     @SuppressWarnings("unchecked")
