@@ -8,6 +8,16 @@ import org.nting.data.ValueChangeListener;
 
 public class PropertyTransform<F, T> extends AbstractProperty<T> {
 
+    public static Property<String> abbreviate(Property<String> sourceProperty, int maxLength) {
+        return new PropertyTransform<>(sourceProperty, text -> {
+            if (text == null || text.length() <= maxLength) {
+                return text;
+            } else {
+                return text.substring(0, maxLength - 3) + "...";
+            }
+        });
+    }
+
     private final Property<F> sourceProperty;
     private final Function<F, T> transform;
 
