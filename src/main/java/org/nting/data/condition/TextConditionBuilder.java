@@ -10,11 +10,11 @@ public class TextConditionBuilder extends ValueConditionBuilder<String> {
     }
 
     public Condition matches(String regex) {
-        return new ConditionTransform<>(value -> value != null && value.matches(regex), getProperty());
+        return new ConditionTransform<>(getProperty(), value -> value != null && value.matches(regex));
     }
 
     public Condition isEmpty() {
-        return new ConditionTransform<>(value -> value == null || value.length() < 1, getProperty());
+        return new ConditionTransform<>(getProperty(), value -> value == null || value.length() < 1);
     }
 
     public Condition isNotEmpty() {
@@ -22,7 +22,7 @@ public class TextConditionBuilder extends ValueConditionBuilder<String> {
     }
 
     public Condition isBlank() {
-        return new ConditionTransform<>(value -> value == null || value.trim().length() < 1, getProperty());
+        return new ConditionTransform<>(getProperty(), value -> value == null || value.trim().length() < 1);
     }
 
     public Condition isNotBlank() {
@@ -30,12 +30,12 @@ public class TextConditionBuilder extends ValueConditionBuilder<String> {
     }
 
     public Condition equals(String text, boolean ignoreCase) {
-        return new ConditionTransform<>(value -> {
+        return new ConditionTransform<>(getProperty(), value -> {
             if (ignoreCase) {
                 return value == null ? text == null : value.equalsIgnoreCase(text);
             } else {
                 return value == null ? text == null : value.equals(text);
             }
-        }, getProperty());
+        });
     }
 }

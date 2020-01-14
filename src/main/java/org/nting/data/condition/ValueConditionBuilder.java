@@ -19,7 +19,7 @@ public class ValueConditionBuilder<T> {
     }
 
     public Condition isNull() {
-        return new ConditionTransform<>(Objects::isNull, getProperty());
+        return new ConditionTransform<>(getProperty(), Objects::isNull);
     }
 
     public Condition isNotNull() {
@@ -27,7 +27,7 @@ public class ValueConditionBuilder<T> {
     }
 
     public Condition is(T expectedValue) {
-        return new ConditionTransform<>(value -> Objects.equals(value, expectedValue), getProperty());
+        return new ConditionTransform<>(getProperty(), value -> Objects.equals(value, expectedValue));
     }
 
     public Condition isNot(T value) {
@@ -35,8 +35,8 @@ public class ValueConditionBuilder<T> {
     }
 
     public Condition valueEquals(Property<T> otherProperty) {
-        return new ConditionReducer<>(list -> Objects.equals(list.get(0), list.get(1)),
-                Lists.newArrayList(getProperty(), otherProperty));
+        return new ConditionReducer<>(Lists.newArrayList(getProperty(), otherProperty),
+                list -> Objects.equals(list.get(0), list.get(1)));
     }
 
     public Condition valueNotEquals(Property<T> model) {
@@ -49,8 +49,8 @@ public class ValueConditionBuilder<T> {
     }
 
     public Condition isIn(Collection<T> collection) {
-        return new ConditionTransform<>(value -> collection.stream().anyMatch(item -> Objects.equals(item, value)),
-                getProperty());
+        return new ConditionTransform<>(getProperty(),
+                value -> collection.stream().anyMatch(item -> Objects.equals(item, value)));
     }
 
     @SafeVarargs
@@ -63,7 +63,7 @@ public class ValueConditionBuilder<T> {
     }
 
     public Condition check(Function<T, Boolean> function) {
-        return new Condition.ConditionTransform<>(function, property);
+        return new Condition.ConditionTransform<>(property, function);
     }
 
     protected Property<T> getProperty() {

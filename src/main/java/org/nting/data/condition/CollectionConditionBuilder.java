@@ -29,7 +29,7 @@ public class CollectionConditionBuilder<E, T extends Collection<E>> {
     }
 
     public Condition containsAny(Collection<E> collection) {
-        return new Condition.ConditionTransform<>(value -> collection.stream().anyMatch(value::contains), property);
+        return new Condition.ConditionTransform<>(property, value -> collection.stream().anyMatch(value::contains));
     }
 
     @SafeVarargs
@@ -38,7 +38,7 @@ public class CollectionConditionBuilder<E, T extends Collection<E>> {
     }
 
     public Condition containsAll(Collection<E> collection) {
-        return new Condition.ConditionTransform<>(value -> value.containsAll(collection), property);
+        return new Condition.ConditionTransform<>(property, value -> value.containsAll(collection));
     }
 
     @SafeVarargs
@@ -47,7 +47,7 @@ public class CollectionConditionBuilder<E, T extends Collection<E>> {
     }
 
     public Condition isEmpty() {
-        return new Condition.ConditionTransform<>(Collection::isEmpty, property);
+        return new Condition.ConditionTransform<>(property, Collection::isEmpty);
     }
 
     public Condition isNotEmpty() {
@@ -55,10 +55,10 @@ public class CollectionConditionBuilder<E, T extends Collection<E>> {
     }
 
     public Condition sizeIsEqualTo(int size) {
-        return new Condition.ConditionTransform<>(value -> value.size() == size, property);
+        return new Condition.ConditionTransform<>(property, value -> value.size() == size);
     }
 
     public Condition check(Function<T, Boolean> function) {
-        return new Condition.ConditionTransform<>(function, property);
+        return new Condition.ConditionTransform<>(property, function);
     }
 }

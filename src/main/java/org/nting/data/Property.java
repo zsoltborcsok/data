@@ -43,10 +43,10 @@ public interface Property<T> {
     }
 
     default <C> Property<C> convert(Converter<T, C> converter) {
-        return new PropertyConverter<>(converter, this);
+        return new PropertyConverter<>(this, converter);
     }
 
     default <C> Property<C> transform(Function<T, C> transform) {
-        return new PropertyTransform<>(transform, this);
+        return new PropertyTransform<>(this, transform);
     }
 }

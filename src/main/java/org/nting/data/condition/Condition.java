@@ -15,38 +15,40 @@ import com.google.common.base.Converter;
 public interface Condition extends Property<Boolean> {
 
     default Condition and(Property<Boolean> condition, Property<Boolean>... others) {
-        return new ConditionReducer<>(conditions -> conditions.stream().reduce(Boolean::logicalAnd).get(),
-                Stream.concat(Stream.of(this, condition), Stream.of(others)).collect(Collectors.toList()));
+        return new ConditionReducer<>(
+                Stream.concat(Stream.of(this, condition), Stream.of(others)).collect(Collectors.toList()),
+                conditions -> conditions.stream().reduce(Boolean::logicalAnd).get());
     }
 
     default Condition or(Property<Boolean> condition, Property<Boolean>... others) {
-        return new ConditionReducer<>(conditions -> conditions.stream().reduce(Boolean::logicalOr).get(),
-                Stream.concat(Stream.of(this, condition), Stream.of(others)).collect(Collectors.toList()));
+        return new ConditionReducer<>(
+                Stream.concat(Stream.of(this, condition), Stream.of(others)).collect(Collectors.toList()),
+                conditions -> conditions.stream().reduce(Boolean::logicalOr).get());
     }
 
     default Condition not() {
-        return new ConditionConverter<>(Converter.from(b -> (b == null ? null : !b), b -> (b == null ? null : !b)),
-                this);
+        return new ConditionConverter<>(this,
+                Converter.from(b -> (b == null ? null : !b), b -> (b == null ? null : !b)));
     }
 
     class ConditionReducer<T> extends PropertyReducer<T, Boolean> implements Condition {
 
-        public ConditionReducer(Function<List<T>, Boolean> reducer, List<Property<T>> dataSources) {
-            super(reducer, dataSources);
+        public ConditionReducer(List<Property<T>> sourceProperties, Function<List<T>, Boolean> reducer) {
+            super(sourceProperties, reducer);
         }
     }
 
     class ConditionConverter<T> extends PropertyConverter<T, Boolean> implements Condition {
 
-        public ConditionConverter(Converter<T, Boolean> converter, Property<T> sourceProperty) {
-            super(converter, sourceProperty);
+        public ConditionConverter(Property<T> sourceProperty, Converter<T, Boolean> converter) {
+            super(sourceProperty, converter);
         }
     }
 
     class ConditionTransform<T> extends PropertyTransform<T, Boolean> implements Condition {
 
-        public ConditionTransform(Function<T, Boolean> transform, Property<T> sourceProperty) {
-            super(transform, sourceProperty);
+        public ConditionTransform(Property<T> sourceProperty, Function<T, Boolean> transform) {
+            super(sourceProperty, transform);
         }
     }
 }

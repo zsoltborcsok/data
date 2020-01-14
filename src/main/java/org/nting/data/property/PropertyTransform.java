@@ -8,14 +8,14 @@ import org.nting.data.ValueChangeListener;
 
 public class PropertyTransform<F, T> extends AbstractProperty<T> {
 
-    private final Function<F, T> transform;
     private final Property<F> sourceProperty;
+    private final Function<F, T> transform;
 
     private Registration registrationOnSourceProperty;
 
-    public PropertyTransform(Function<F, T> transform, Property<F> sourceProperty) {
-        this.transform = transform;
+    public PropertyTransform(Property<F> sourceProperty, Function<F, T> transform) {
         this.sourceProperty = sourceProperty;
+        this.transform = transform;
     }
 
     @Override

@@ -42,7 +42,7 @@ public class PropertyConverterTest {
     @Before
     public void setUp() {
         priority = new ObjectProperty<>(BLOCKER);
-        priorityAsString = new PropertyConverter<>(Enums.stringConverter(Priority.class).reverse(), priority);
+        priorityAsString = new PropertyConverter<>(priority, Enums.stringConverter(Priority.class).reverse());
 
         priority.addValueChangeListener(priorityValueChangeListener);
         registration = priorityAsString.addValueChangeListener(stringValueChangeListener);

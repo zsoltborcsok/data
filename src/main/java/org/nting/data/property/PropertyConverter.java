@@ -8,14 +8,14 @@ import com.google.common.base.Converter;
 
 public class PropertyConverter<F, T> extends AbstractProperty<T> {
 
-    private final Converter<F, T> converter;
     private final Property<F> sourceProperty;
+    private final Converter<F, T> converter;
 
     private Registration registrationOnSourceProperty;
 
-    public PropertyConverter(Converter<F, T> converter, Property<F> sourceProperty) {
-        this.converter = converter;
+    public PropertyConverter(Property<F> sourceProperty, Converter<F, T> converter) {
         this.sourceProperty = sourceProperty;
+        this.converter = converter;
     }
 
     @Override

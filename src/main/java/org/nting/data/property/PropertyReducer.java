@@ -20,20 +20,20 @@ public class PropertyReducer<F, T> extends AbstractProperty<T> {
                 properties);
     }
 
-    private final Function<List<F>, T> reducer;
     private final List<Property<F>> sourceProperties;
+    private final Function<List<F>, T> reducer;
 
     private final List<Registration> registrations = Lists.newLinkedList();
     private T value;
 
     @SafeVarargs
     public PropertyReducer(Function<List<F>, T> reducer, Property<F>... sourceProperties) {
-        this(reducer, ImmutableList.copyOf(sourceProperties));
+        this(ImmutableList.copyOf(sourceProperties), reducer);
     }
 
-    public PropertyReducer(Function<List<F>, T> reducer, List<Property<F>> sourceProperties) {
-        this.reducer = reducer;
+    public PropertyReducer(List<Property<F>> sourceProperties, Function<List<F>, T> reducer) {
         this.sourceProperties = ImmutableList.copyOf(sourceProperties);
+        this.reducer = reducer;
     }
 
     @Override

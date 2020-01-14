@@ -22,6 +22,6 @@ public class Conditions {
     }
 
     public static Condition convert(Property<Boolean> condition) {
-        return new ConditionConverter<>(Converter.from(b -> b, b -> b), condition);
+        return new ConditionConverter<>(condition, Converter.from(b -> b, b -> b));
     }
 }
