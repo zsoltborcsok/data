@@ -24,7 +24,7 @@ public class PropertyReducer<F, T> extends AbstractProperty<T> {
     private final Function<List<F>, T> reducer;
 
     private final List<Registration> registrations = Lists.newLinkedList();
-    private T value;
+    private T prevValue;
 
     @SafeVarargs
     public PropertyReducer(Function<List<F>, T> reducer, Property<F>... sourceProperties) {
@@ -38,7 +38,7 @@ public class PropertyReducer<F, T> extends AbstractProperty<T> {
 
     @Override
     public T getValue() {
-        return value;
+        return computeValue();
     }
 
     @Override
@@ -54,14 +54,15 @@ public class PropertyReducer<F, T> extends AbstractProperty<T> {
     public Registration addValueChangeListener(ValueChangeListener<T> listener) {
         if (valueChangeListeners.size() == 0) {
             ValueChangeListener<F> valueChangeHandler = event -> {
-                T prevValue = value;
-                value = computeValue();
-                if (!Objects.equals(prevValue, value)) {
+                T currentValue = computeValue();
+                if (!Objects.equals(prevValue, currentValue)) {
                     fireValueChange(prevValue);
                 }
+                prevValue = currentValue;
             };
-            sourceProperties
-                    .forEach(dataSource -> registrations.add(dataSource.addValueChangeListener(valueChangeHandler)));
+            sourceProperties.forEach(
+                    sourceProperty -> registrations.add(sourceProperty.addValueChangeListener(valueChangeHandler)));
+            prevValue = computeValue();
         }
 
         super.addValueChangeListener(listener);
