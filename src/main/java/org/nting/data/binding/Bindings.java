@@ -4,6 +4,7 @@ import org.nting.data.Property;
 import org.nting.data.Registration;
 import org.nting.data.ValueChangeEvent;
 import org.nting.data.ValueChangeListener;
+import org.nting.data.condition.Condition;
 
 import com.google.common.base.Converter;
 
@@ -39,10 +40,16 @@ public class Bindings {
         }
     }
 
+    public static Binding bindCondition(Condition condition, Property<Boolean> target) {
+        return new AutoBindingRead<>(condition, target);
+    }
+
+    /** It's a read binding. */
     public static <T> Binding conditionalBinding(Property<T> source, Property<T> target, Property<Boolean> condition) {
         return new ConditionalAutoBinding<>(source, target, condition);
     }
 
+    /** It's a read binding. */
     public static <F, T> Binding conditionalBinding(Property<F> source, Property<T> target, Property<Boolean> condition,
             Converter<F, T> converter) {
         return new ConditionalAutoBinding<>(source, target, condition, converter);
