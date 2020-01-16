@@ -5,6 +5,9 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
+import org.nting.data.Property;
+import org.nting.data.property.BeanProperty;
+
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 
@@ -37,5 +40,21 @@ public class BeanDescriptor<BEAN> {
     @SuppressWarnings("unchecked")
     public <T> PropertyDescriptor<BEAN, T> getPropertyDescriptor(String propertyName) {
         return (PropertyDescriptor<BEAN, T>) propertyDescriptors.get(propertyName);
+    }
+
+    public RuntimeBean createRuntimeBean(BEAN bean) {
+        return new RuntimeBean() {
+
+            @Override
+            public Set<String> getPropertyNames() {
+                return BeanDescriptor.this.getPropertyNames();
+            }
+
+            @Override
+            public <T> Property<T> getProperty(String propertyName) {
+                Preconditions.checkArgument(propertyDescriptors.containsKey(propertyName));
+                return new BeanProperty<>(bean, BeanDescriptor.this.getPropertyDescriptor(propertyName));
+            }
+        };
     }
 }
