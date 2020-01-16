@@ -16,6 +16,7 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.nting.data.Property;
 import org.nting.data.ValueChangeEvent;
 import org.nting.data.ValueChangeListener;
 import org.nting.data.model.IssueBean;
@@ -35,8 +36,7 @@ public class BeanPropertyTest {
 
     @Test
     public void testStringProperty() {
-        BeanProperty<IssueBean, String> beanProperty = new BeanProperty<>(issueBean, IssueBean::getTitle,
-                IssueBean::setTitle);
+        Property<String> beanProperty = new BeanProperty<>(issueBean, IssueBean::getTitle, IssueBean::setTitle);
 
         beanProperty.setValue("H.E.L.P.");
         assertEquals("H.E.L.P.", beanProperty.getValue());
@@ -49,8 +49,8 @@ public class BeanPropertyTest {
 
     @Test
     public void testEnumProperty() {
-        BeanProperty<IssueBean, Status> beanProperty = new BeanProperty<>(issueBean, IssueBean::getStatus,
-                IssueBean::setStatus);
+        BeanProperty<IssueBean, Status> beanProperty = new BeanProperty<>(issueBean,
+                IssueBean.beanDescriptor().getPropertyDescriptor("status"));
 
         beanProperty.setValue(IN_PROGRESS);
         assertEquals(IN_PROGRESS, beanProperty.getValue());

@@ -4,6 +4,8 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
+import org.nting.data.bean.PropertyDescriptor;
+
 import com.google.common.base.MoreObjects;
 
 public class BeanProperty<BEAN, T> extends AbstractProperty<T> {
@@ -11,6 +13,10 @@ public class BeanProperty<BEAN, T> extends AbstractProperty<T> {
     private final BEAN bean;
     private final Function<BEAN, T> getter;
     private final BiConsumer<BEAN, T> setter;
+
+    public BeanProperty(BEAN bean, PropertyDescriptor<BEAN, T> propertyDescriptor) {
+        this(bean, propertyDescriptor.getter, propertyDescriptor.setter);
+    }
 
     public BeanProperty(BEAN bean, Function<BEAN, T> getter, BiConsumer<BEAN, T> setter) {
         this.bean = bean;
