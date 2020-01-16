@@ -20,7 +20,7 @@ public class StringToListConverter<T> extends Converter<String, List<T>> {
 
     public StringToListConverter(String separator, Converter<String, T> converter) {
         joiner = Joiner.on(separator);
-        splitter = Splitter.on(separator);
+        splitter = Splitter.on(separator).omitEmptyStrings();
         this.converter = converter;
     }
 
