@@ -159,13 +159,17 @@ public class ListProperty<E> extends AbstractProperty<List<E>> implements List<E
     private void wrapValueChange(Runnable valueChangeFunction) {
         List<E> prevValue = ImmutableList.copyOf(value);
         valueChangeFunction.run();
-        fireValueChange(prevValue);
+        if (!Objects.equals(prevValue, value)) {
+            fireValueChange(prevValue);
+        }
     }
 
     private <RESULT> RESULT wrapValueChange(Supplier<RESULT> valueChangeFunction) {
         List<E> prevValue = ImmutableList.copyOf(value);
         RESULT result = valueChangeFunction.get();
-        fireValueChange(prevValue);
+        if (!Objects.equals(prevValue, value)) {
+            fireValueChange(prevValue);
+        }
         return result;
     }
 

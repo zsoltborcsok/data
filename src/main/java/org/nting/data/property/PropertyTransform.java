@@ -1,5 +1,6 @@
 package org.nting.data.property;
 
+import java.util.Objects;
 import java.util.function.Function;
 
 import org.nting.data.Property;
@@ -42,7 +43,10 @@ public class PropertyTransform<F, T> extends AbstractProperty<T> {
     public Registration addValueChangeListener(ValueChangeListener<T> listener) {
         if (valueChangeListeners.size() == 0) {
             registrationOnSourceProperty = sourceProperty.addValueChangeListener(event -> {
-                fireValueChange(transform.apply(event.getPrevValue()));
+                T prevValue = transform.apply(event.getPrevValue());
+                if (!Objects.equals(prevValue, getValue())) {
+                    fireValueChange(prevValue);
+                }
             });
         }
 

@@ -102,13 +102,17 @@ public class MapProperty<K, V> extends AbstractProperty<Map<K, V>> implements Ma
     private void wrapValueChange(Runnable valueChangeFunction) {
         Map<K, V> prevValue = ImmutableMap.copyOf(value);
         valueChangeFunction.run();
-        fireValueChange(prevValue);
+        if (!Objects.equals(prevValue, value)) {
+            fireValueChange(prevValue);
+        }
     }
 
     private <RESULT> RESULT wrapValueChange(Supplier<RESULT> valueChangeFunction) {
         Map<K, V> prevValue = ImmutableMap.copyOf(value);
         RESULT result = valueChangeFunction.get();
-        fireValueChange(prevValue);
+        if (!Objects.equals(prevValue, value)) {
+            fireValueChange(prevValue);
+        }
         return result;
     }
 

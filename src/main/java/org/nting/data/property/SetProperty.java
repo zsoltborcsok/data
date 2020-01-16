@@ -108,13 +108,17 @@ public class SetProperty<E> extends AbstractProperty<Set<E>> implements Set<E> {
     private void wrapValueChange(Runnable valueChangeFunction) {
         Set<E> prevValue = ImmutableSet.copyOf(value);
         valueChangeFunction.run();
-        fireValueChange(prevValue);
+        if (!Objects.equals(prevValue, value)) {
+            fireValueChange(prevValue);
+        }
     }
 
     private <RESULT> RESULT wrapValueChange(Supplier<RESULT> valueChangeFunction) {
         Set<E> prevValue = ImmutableSet.copyOf(value);
         RESULT result = valueChangeFunction.get();
-        fireValueChange(prevValue);
+        if (!Objects.equals(prevValue, value)) {
+            fireValueChange(prevValue);
+        }
         return result;
     }
 
