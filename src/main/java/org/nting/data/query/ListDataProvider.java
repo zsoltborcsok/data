@@ -2,7 +2,6 @@ package org.nting.data.query;
 
 import static org.nting.data.query.QuerySortOrder.DEFAULT_COLLATOR;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -38,7 +37,7 @@ public class ListDataProvider<T> implements DataProvider<T> {
     }
 
     @Override
-    public DataProviderPromise<Collection<T>> fetch(Query<T> query) {
+    public DataProviderPromise<List<T>> fetch(Query<T> query) {
         Stream<T> stream = backendCollection.stream();
 
         if (query.queryFilter != null) {

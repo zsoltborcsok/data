@@ -33,21 +33,21 @@ public class Compare implements QueryFilter {
     @Override
     public <T> Predicate<T> toInMemoryFilter(BeanDescriptor<T> beanDescriptor) {
         Function<T, Comparable> getter = beanDescriptor.<Comparable> getPropertyDescriptor(propertyName).getter;
-        Comparator beanComparator = Comparator.nullsFirst(Comparator.comparing(getter));
+        Comparator beanComparator = Comparator.nullsFirst(Comparator.naturalOrder());
         switch (operation) {
         case EQUAL:
         case POINTER_EQUAL:
             return bean -> Objects.equals(value, getter.apply(bean));
         case NOT_EQUAL:
-            return bean -> beanComparator.compare(value, bean) != 0;
+            return bean -> beanComparator.compare(value, getter.apply(bean)) != 0;
         case GREATER:
-            return bean -> beanComparator.compare(value, bean) > 0;
+            return bean -> beanComparator.compare(value, getter.apply(bean)) < 0;
         case LESS:
-            return bean -> beanComparator.compare(value, bean) < 0;
+            return bean -> beanComparator.compare(value, getter.apply(bean)) > 0;
         case GREATER_OR_EQUAL:
-            return bean -> beanComparator.compare(value, bean) >= 0;
+            return bean -> beanComparator.compare(value, getter.apply(bean)) <= 0;
         case LESS_OR_EQUAL:
-            return bean -> beanComparator.compare(value, bean) <= 0;
+            return bean -> beanComparator.compare(value, getter.apply(bean)) >= 0;
         case EXIST:
             return bean -> Objects.nonNull(getter.apply(bean));
         case STARTS_WITH:
