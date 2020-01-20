@@ -84,6 +84,10 @@ public class PropertySet implements RuntimeBean {
         return false;
     }
 
+    public boolean removeProperty(Object propertyId) {
+        return removeProperty(propertyId.toString());
+    }
+
     public Registration addValueChangeListener(ValueChangeListener<Object> listener) {
         Preconditions.checkArgument(!valueChangeListeners.contains(listener));
 
