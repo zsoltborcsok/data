@@ -24,7 +24,7 @@ public class PropertySet implements RuntimeBean {
     private final BiMap<String, Property<?>> nameToPropertyMap = HashBiMap.create();
     private final Map<String, Registration> valueChangeRegistrations = Maps.newHashMap();
 
-    public <T> Property<T> addProperty(String propertyName, Property<T> property) {
+    private <T> Property<T> addProperty(String propertyName, Property<T> property) {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(propertyName), "Property name can not be null or empty");
         Preconditions.checkArgument(!nameToPropertyMap.containsKey(propertyName), "Property name must be unique");
 
@@ -37,19 +37,23 @@ public class PropertySet implements RuntimeBean {
         return property;
     }
 
+    public <T> Property<T> addCustomProperty(Object propertyId, Property<T> property) {
+        return addProperty(propertyId.toString(), property);
+    }
+
     public <T> Property<T> addObjectProperty(Object propertyId, T initialValue) {
         return addProperty(propertyId.toString(), new ObjectProperty<>(initialValue));
     }
 
-    public final <T> ListProperty<T> addListProperty(Object propertyId, Iterable<? extends T> initialElements) {
+    public <T> ListProperty<T> addListProperty(Object propertyId, Iterable<? extends T> initialElements) {
         return (ListProperty<T>) addProperty(propertyId.toString(), new ListProperty<T>(initialElements));
     }
 
-    public final <T> SetProperty<T> addSetProperty(Object propertyId, Iterable<? extends T> initialElements) {
+    public <T> SetProperty<T> addSetProperty(Object propertyId, Iterable<? extends T> initialElements) {
         return (SetProperty<T>) addProperty(propertyId.toString(), new SetProperty<T>(initialElements));
     }
 
-    public final <K, V> MapProperty<K, V> addMapProperty(Object propertyId) {
+    public <K, V> MapProperty<K, V> addMapProperty(Object propertyId) {
         return (MapProperty<K, V>) addProperty(propertyId.toString(), new MapProperty<K, V>());
     }
 
