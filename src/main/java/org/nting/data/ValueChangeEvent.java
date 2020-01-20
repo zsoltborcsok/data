@@ -35,7 +35,7 @@ public class ValueChangeEvent<T> extends EventObject {
         return prevValue;
     }
 
-    public Object getPropertyName() {
+    public String getPropertyName() {
         return propertyName;
     }
 
