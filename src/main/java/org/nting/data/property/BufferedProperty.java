@@ -91,14 +91,17 @@ public class BufferedProperty<T> extends AbstractProperty<T> implements Buffered
             });
         }
 
-        super.addValueChangeListener(listener);
-        return () -> {
-            valueChangeListeners.remove(listener);
-            if (valueChangeListeners.size() == 0 && registrationOnProperty != null) {
-                registrationOnProperty.remove();
-                registrationOnProperty = null;
-            }
-        };
+        return super.addValueChangeListener(listener);
+    }
+
+    @Override
+    public void removeValueChangeListener(ValueChangeListener<T> listener) {
+        super.removeValueChangeListener(listener);
+
+        if (valueChangeListeners.size() == 0 && registrationOnProperty != null) {
+            registrationOnProperty.remove();
+            registrationOnProperty = null;
+        }
     }
 
     public Property<T> getSource() {

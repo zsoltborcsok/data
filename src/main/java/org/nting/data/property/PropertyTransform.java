@@ -50,13 +50,16 @@ public class PropertyTransform<F, T> extends AbstractProperty<T> {
             });
         }
 
-        super.addValueChangeListener(listener);
-        return () -> {
-            valueChangeListeners.remove(listener);
-            if (valueChangeListeners.size() == 0 && registrationOnSourceProperty != null) {
-                registrationOnSourceProperty.remove();
-                registrationOnSourceProperty = null;
-            }
-        };
+        return super.addValueChangeListener(listener);
+    }
+
+    @Override
+    public void removeValueChangeListener(ValueChangeListener<T> listener) {
+        super.removeValueChangeListener(listener);
+
+        if (valueChangeListeners.size() == 0 && registrationOnSourceProperty != null) {
+            registrationOnSourceProperty.remove();
+            registrationOnSourceProperty = null;
+        }
     }
 }

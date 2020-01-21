@@ -65,13 +65,16 @@ public class PropertyReducer<F, T> extends AbstractProperty<T> {
             prevValue = computeValue();
         }
 
-        super.addValueChangeListener(listener);
-        return () -> {
-            valueChangeListeners.remove(listener);
-            if (valueChangeListeners.size() == 0) {
-                registrations.forEach(Registration::remove);
-                registrations.clear();
-            }
-        };
+        return super.addValueChangeListener(listener);
+    }
+
+    @Override
+    public void removeValueChangeListener(ValueChangeListener<T> listener) {
+        super.removeValueChangeListener(listener);
+
+        if (valueChangeListeners.size() == 0) {
+            registrations.forEach(Registration::remove);
+            registrations.clear();
+        }
     }
 }

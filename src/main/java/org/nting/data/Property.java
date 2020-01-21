@@ -1,5 +1,6 @@
 package org.nting.data;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -48,5 +49,12 @@ public interface Property<T> {
 
     default <C> Property<C> transform(Function<T, C> transform) {
         return new PropertyTransform<>(this, transform);
+    }
+
+    interface ValueChangeListenerSupport<T> {
+
+        List<ValueChangeListener<T>> getValueChangeListeners();
+
+        void removeValueChangeListener(ValueChangeListener<T> listener);
     }
 }
