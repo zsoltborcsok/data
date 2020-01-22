@@ -39,7 +39,7 @@ public interface RuntimeBean {
         getProperty(propertyId).setValue(value);
     }
 
-    default BeanDescriptor<? extends RuntimeBean> beanDescriptor() {
+    default BeanDescriptor<?> beanDescriptor() {
         BeanDescriptor<? extends RuntimeBean> beanDescriptor = new BeanDescriptor<>(getClass());
         for (String propertyName : getPropertyNames()) {
             beanDescriptor.addPropertyDescriptor(propertyName, bean -> bean.getProperty(propertyName).getValue(),

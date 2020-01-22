@@ -3,6 +3,7 @@ package org.nting.data.inject.internal;
 import java.util.Map;
 
 import org.nting.data.Property;
+import org.nting.data.bean.BeanDescriptor;
 import org.nting.data.bean.RuntimeBean;
 import org.nting.data.inject.Binder;
 import org.nting.data.inject.Injector;
@@ -18,8 +19,10 @@ public class InjectorImpl implements Injector {
 
     @Override
     public void injectProperties(RuntimeBean instance) {
-        injectProperties(instance, instance.getClass().getName());
-        // for (Class aClass : collectSuperClasses(instance.getClass())) {
+        Class<?> beanType = instance instanceof BeanDescriptor.RuntimeBeanImpl ? instance.beanDescriptor().beanType
+                : instance.getClass();
+        injectProperties(instance, beanType.getName());
+        // for (Class aClass : collectSuperClasses(beanClass)) {
         // injectProperties(instance, aClass.getName());
         // }
     }

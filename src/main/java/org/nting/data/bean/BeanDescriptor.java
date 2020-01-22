@@ -43,18 +43,32 @@ public class BeanDescriptor<BEAN> {
     }
 
     public RuntimeBean createRuntimeBean(BEAN bean) {
-        return new RuntimeBean() {
+        return new RuntimeBeanImpl(bean);
+    }
 
-            @Override
-            public Set<String> getPropertyNames() {
-                return BeanDescriptor.this.getPropertyNames();
-            }
+    public class RuntimeBeanImpl implements RuntimeBean {
 
-            @Override
-            public <T> Property<T> getProperty(String propertyName) {
-                Preconditions.checkArgument(propertyDescriptors.containsKey(propertyName));
-                return new BeanProperty<>(bean, BeanDescriptor.this.getPropertyDescriptor(propertyName));
-            }
-        };
+        private final BEAN bean;
+
+        public RuntimeBeanImpl(BEAN bean) {
+            this.bean = bean;
+        }
+
+        @Override
+        public Set<String> getPropertyNames() {
+            return BeanDescriptor.this.getPropertyNames();
+        }
+
+        @Override
+        public <T> Property<T> getProperty(String propertyName) {
+            Preconditions.checkArgument(propertyDescriptors.containsKey(propertyName), "Missing property: '%s'",
+                    propertyName);
+            return new BeanProperty<>(bean, BeanDescriptor.this.getPropertyDescriptor(propertyName));
+        }
+
+        @Override
+        public BeanDescriptor<BEAN> beanDescriptor() {
+            return BeanDescriptor.this;
+        }
     }
 }
