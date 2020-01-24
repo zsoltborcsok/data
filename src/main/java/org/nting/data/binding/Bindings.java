@@ -1,5 +1,6 @@
 package org.nting.data.binding;
 
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.nting.data.Property;
@@ -7,6 +8,7 @@ import org.nting.data.Registration;
 import org.nting.data.ValueChangeEvent;
 import org.nting.data.ValueChangeListener;
 import org.nting.data.condition.Condition;
+import org.nting.data.property.PropertyBiTransform;
 
 import com.google.common.base.Converter;
 
@@ -77,6 +79,11 @@ public class Bindings {
     public static <T> Property<T> weld(Property<T> property) {
         property.addValueChangeListener(emptyValueChangeListener());
         return property;
+    }
+
+    public static <A, B, T> Property<T> transformProperties(Property<A> source1, Property<B> source2,
+            BiFunction<A, B, T> biTransform) {
+        return new PropertyBiTransform<>(source1, source2, biTransform);
     }
 
     private static abstract class AutoBindingBase<F, T> implements Binding {
