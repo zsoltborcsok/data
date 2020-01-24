@@ -1,5 +1,7 @@
 package org.nting.data.binding;
 
+import java.util.function.Function;
+
 import org.nting.data.Property;
 import org.nting.data.Registration;
 import org.nting.data.ValueChangeEvent;
@@ -38,6 +40,12 @@ public class Bindings {
         } else {
             throw new IllegalArgumentException("Unknown BindingStrategy.");
         }
+    }
+
+    public static <F, T> Binding bind(Property<F> source, Property<T> target, Function<F, T> transform) {
+        return bind(BindingStrategy.READ, source, target, Converter.from(transform::apply, b -> {
+            throw new UnsupportedOperationException();
+        }));
     }
 
     public static Binding bindCondition(Condition condition, Property<Boolean> target) {
