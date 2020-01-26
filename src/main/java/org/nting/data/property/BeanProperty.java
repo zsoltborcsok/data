@@ -7,6 +7,7 @@ import java.util.function.Function;
 import org.nting.data.bean.PropertyDescriptor;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
 
 public class BeanProperty<BEAN, T> extends AbstractProperty<T> {
 
@@ -31,12 +32,19 @@ public class BeanProperty<BEAN, T> extends AbstractProperty<T> {
 
     @Override
     public void setValue(T newValue) {
+        Preconditions.checkState(setter != null, "Property is readonly!");
+
         T prevValue = getValue();
         if (!Objects.equals(prevValue, newValue)) {
             setter.accept(bean, newValue);
 
             fireValueChange(prevValue);
         }
+    }
+
+    @Override
+    public boolean isReadOnly() {
+        return setter == null;
     }
 
     @Override

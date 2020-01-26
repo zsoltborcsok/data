@@ -34,6 +34,11 @@ public class PropertyBiTransform<A, B, T> extends AbstractProperty<T> {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public boolean isReadOnly() {
+        return true;
+    }
+
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public Registration addValueChangeListener(ValueChangeListener<T> listener) {

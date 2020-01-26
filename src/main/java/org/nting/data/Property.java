@@ -17,6 +17,10 @@ public interface Property<T> {
 
     Registration addValueChangeListener(ValueChangeListener<T> listener);
 
+    default boolean isReadOnly() {
+        return false;
+    }
+
     default boolean hasValue() {
         return getValue() != null;
     }

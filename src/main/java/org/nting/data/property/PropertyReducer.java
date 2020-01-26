@@ -46,6 +46,11 @@ public class PropertyReducer<F, T> extends AbstractProperty<T> {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public boolean isReadOnly() {
+        return true;
+    }
+
     private T computeValue() {
         return reducer.apply(sourceProperties.stream().map(Property::getValue).collect(Collectors.toList()));
     }

@@ -40,6 +40,11 @@ public class PropertyTransform<F, T> extends AbstractProperty<T> {
     }
 
     @Override
+    public boolean isReadOnly() {
+        return true;
+    }
+
+    @Override
     public Registration addValueChangeListener(ValueChangeListener<T> listener) {
         if (valueChangeListeners.size() == 0) {
             registrationOnSourceProperty = sourceProperty.addValueChangeListener(event -> {
