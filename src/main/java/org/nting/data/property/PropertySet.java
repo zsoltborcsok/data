@@ -41,8 +41,8 @@ public class PropertySet implements RuntimeBean {
         return addProperty(propertyId.toString(), property);
     }
 
-    public <T> Property<T> addObjectProperty(Object propertyId, T initialValue) {
-        return addProperty(propertyId.toString(), new ObjectProperty<>(initialValue));
+    public <T> ObjectProperty<T> addObjectProperty(Object propertyId, T initialValue) {
+        return (ObjectProperty<T>) addProperty(propertyId.toString(), new ObjectProperty<>(initialValue));
     }
 
     public <T> ListProperty<T> addListProperty(Object propertyId, Iterable<? extends T> initialElements) {
