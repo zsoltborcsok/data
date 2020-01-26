@@ -31,6 +31,19 @@ public class ObjectProperty<T> extends AbstractProperty<T> {
         }
     }
 
+    public void forceValue(T newValue) {
+        if (!readOnly) {
+            setValue(newValue);
+        } else {
+            try {
+                setReadOnly(false);
+                setValue(newValue);
+            } finally {
+                setReadOnly(true);
+            }
+        }
+    }
+
     public void setReadOnly(boolean readOnly) {
         this.readOnly = readOnly;
     }
