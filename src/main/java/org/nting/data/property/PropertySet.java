@@ -11,6 +11,7 @@ import org.nting.data.ValueChangeEvent;
 import org.nting.data.ValueChangeListener;
 import org.nting.data.bean.RuntimeBean;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.BiMap;
@@ -107,5 +108,10 @@ public class PropertySet implements RuntimeBean {
                 propertyName);
         valueChangeListeners.stream().sorted(Comparator.comparingInt(ValueChangeListener::priority))
                 .forEach(listener -> listener.valueChange(valueChangeEvent));
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).add("nameToPropertyMap", nameToPropertyMap).toString();
     }
 }
