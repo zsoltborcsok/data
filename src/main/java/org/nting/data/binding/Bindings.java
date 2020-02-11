@@ -46,9 +46,7 @@ public class Bindings {
     }
 
     public static <F, T> Binding bind(Property<F> source, Property<T> target, Function<F, T> transform) {
-        return bind(BindingStrategy.READ, source, target, Converter.from(transform::apply, b -> {
-            throw new UnsupportedOperationException();
-        }));
+        return new AutoBindingRead<>(source, target, transform);
     }
 
     public static Binding bindCondition(Condition condition, Property<Boolean> target) {
@@ -101,43 +99,36 @@ public class Bindings {
 
         protected final Property<F> source;
         protected final Property<T> target;
-        protected final Converter<F, T> converter;
 
         public AutoBindingBase(Property<F> source, Property<T> target) {
+            this.source = source;
+            this.target = target;
+        }
+    }
+
+    private static class AutoBindingRead<F, T> extends AutoBindingBase<F, T> {
+
+        private final Function<F, T> converter;
+        private Registration registration;
+
+        public AutoBindingRead(Property<F> source, Property<T> target) {
             this(source, target, null);
         }
 
-        public AutoBindingBase(Property<F> source, Property<T> target, Converter<F, T> converter) {
-            this.source = source;
-            this.target = target;
+        public AutoBindingRead(Property<F> source, Property<T> target, Function<F, T> converter) {
+            super(source, target);
             this.converter = converter;
 
             bind();
         }
 
-        protected abstract void bind();
-    }
-
-    private static class AutoBindingRead<F, T> extends AutoBindingBase<F, T> {
-
-        private Registration registration;
-
-        public AutoBindingRead(Property<F> source, Property<T> target) {
-            super(source, target);
-        }
-
-        public AutoBindingRead(Property<F> source, Property<T> target, Converter<F, T> converter) {
-            super(source, target, converter);
-        }
-
         @SuppressWarnings("unchecked")
-        @Override
         protected void bind() {
             ValueChangeListener<F> valueChangeHandler = event -> {
                 if (converter == null) {
                     target.setValue((T) source.getValue());
                 } else {
-                    target.setValue(converter.convert(source.getValue()));
+                    target.setValue(converter.apply(source.getValue()));
                 }
             };
 
@@ -156,19 +147,22 @@ public class Bindings {
 
     private static class AutoBindingReadWrite<F, T> extends AutoBindingBase<F, T> {
 
+        private final Converter<F, T> converter;
         private Registration sourceRegistration;
         private Registration targetRegistration;
 
         public AutoBindingReadWrite(Property<F> source, Property<T> target) {
-            super(source, target);
+            this(source, target, null);
         }
 
         public AutoBindingReadWrite(Property<F> source, Property<T> target, Converter<F, T> converter) {
-            super(source, target, converter);
+            super(source, target);
+            this.converter = converter;
+
+            bind();
         }
 
         @SuppressWarnings("unchecked")
-        @Override
         public void bind() {
             ValueChangeListener<F> sourceValueChangeHandler = event -> {
                 if (converter == null) {
