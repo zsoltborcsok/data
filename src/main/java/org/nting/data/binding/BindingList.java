@@ -14,12 +14,7 @@ public class BindingList implements Binding {
 
     @Override
     public void unbind() {
-        for (Binding binding : bindings) {
-            binding.unbind();
-            if (!(binding instanceof BindingList)) {
-                bindings.remove(binding); // Only remove the 'single' bindings.
-            }
-        }
-
+        bindings.forEach(Binding::unbind);
+        bindings.removeIf(binding -> !(binding instanceof BindingList)); // Only remove the 'single' bindings.
     }
 }
