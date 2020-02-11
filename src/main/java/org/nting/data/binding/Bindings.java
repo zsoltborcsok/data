@@ -70,6 +70,12 @@ public class Bindings {
         return registration::remove;
     }
 
+    public static <T> Binding bind(Property<T> source, ValueChangeListener<T> listener) {
+        Binding binding = asBinding(source.addValueChangeListener(listener));
+        listener.valueChange(new ValueChangeEvent<T>(source, null));
+        return binding;
+    }
+
     /**
      * By 'welding' we add an empty ValueChangeListener to the given property, which results ValueChangeListener
      * registration on the dependent properties. It could be useful in such cases when the property value isn't
