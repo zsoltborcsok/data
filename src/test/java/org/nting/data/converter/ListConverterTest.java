@@ -25,7 +25,7 @@ public class ListConverterTest {
     @Before
     public void setUp() {
         prioritiesProperty = new ListProperty<>(MAJOR, BLOCKER, CRITICAL);
-        stringsProperty = prioritiesProperty.convert(new ListConverter<>(enumConverter(Priority.class).reverse()));
+        stringsProperty = prioritiesProperty.convert(new ListConverter<>(enumConverter(Priority.class)));
     }
 
     @Test

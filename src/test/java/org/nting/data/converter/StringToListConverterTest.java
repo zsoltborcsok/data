@@ -1,7 +1,7 @@
 package org.nting.data.converter;
 
 import static org.junit.Assert.assertEquals;
-import static org.nting.data.converter.StringConverters.enumConverter;
+import static org.nting.data.converter.StringConverters.toEnumConverter;
 import static org.nting.data.model.Priority.BLOCKER;
 import static org.nting.data.model.Priority.CRITICAL;
 import static org.nting.data.model.Priority.MAJOR;
@@ -25,7 +25,7 @@ public class StringToListConverterTest {
     public void setUp() {
         prioritiesProperty = new ListProperty<>(MAJOR, BLOCKER, CRITICAL);
         stringProperty = prioritiesProperty
-                .convert(new StringToListConverter<>(", ", enumConverter(Priority.class)).reverse());
+                .convert(new StringToListConverter<>(", ", toEnumConverter(Priority.class)).reverse());
     }
 
     @Test
