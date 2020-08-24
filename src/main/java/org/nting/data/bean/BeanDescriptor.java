@@ -8,6 +8,7 @@ import java.util.function.Function;
 import org.nting.data.Property;
 import org.nting.data.property.BeanProperty;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 
@@ -46,11 +47,18 @@ public class BeanDescriptor<BEAN> {
         return new RuntimeBeanImpl(bean);
     }
 
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).add("beanType", beanType)
+                .add("propertyDescriptors", propertyDescriptors).toString();
+    }
+
     public class RuntimeBeanImpl implements RuntimeBean {
 
         private final BEAN bean;
+        private final Map<String, BeanProperty<BEAN, ?>> nameToPropertyMap = Maps.newHashMap();
 
-        public RuntimeBeanImpl(BEAN bean) {
+        private RuntimeBeanImpl(BEAN bean) {
             this.bean = bean;
         }
 
@@ -59,16 +67,28 @@ public class BeanDescriptor<BEAN> {
             return BeanDescriptor.this.getPropertyNames();
         }
 
+        @SuppressWarnings("unchecked")
         @Override
         public <T> Property<T> getProperty(String propertyName) {
             Preconditions.checkArgument(propertyDescriptors.containsKey(propertyName), "Missing property: '%s'",
                     propertyName);
-            return new BeanProperty<>(bean, BeanDescriptor.this.getPropertyDescriptor(propertyName));
+            BeanProperty<BEAN, T> property = (BeanProperty<BEAN, T>) nameToPropertyMap.get(propertyName);
+            if (property == null) {
+                property = new BeanProperty<>(bean, BeanDescriptor.this.getPropertyDescriptor(propertyName));
+                nameToPropertyMap.put(propertyName, property);
+            }
+            return property;
         }
 
         @Override
         public BeanDescriptor<BEAN> beanDescriptor() {
             return BeanDescriptor.this;
+        }
+
+        @Override
+        public String toString() {
+            return MoreObjects.toStringHelper(this).add("bean", bean).add("nameToPropertyMap", nameToPropertyMap)
+                    .toString();
         }
     }
 }
