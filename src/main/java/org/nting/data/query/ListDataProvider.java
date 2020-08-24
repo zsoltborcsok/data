@@ -11,7 +11,7 @@ import org.nting.data.bean.BeanDescriptor;
 
 import com.google.common.base.MoreObjects;
 
-public class ListDataProvider<T> implements DataProvider<T> {
+public class ListDataProvider<T> extends AbstractDataProvider<T> {
 
     private final List<T> backendCollection;
     private final BeanDescriptor<T> beanDescriptor;
